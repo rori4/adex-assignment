@@ -19,6 +19,7 @@ export default class BlockchainService {
       "event OwnerRemoval(address indexed owner)",
       "event RequirementChange(uint required)",
       "function getOwners() public constant returns (address[])",
+      "function required() public constant returns (uint256)"
       //Those should be correct functions!!
     ];
   }
@@ -37,7 +38,8 @@ export default class BlockchainService {
     try {
       let contract = new ethers.Contract(address, this.abi, this.provider);
       let owners = await contract.getOwners();
-      console.log(owners);
+      let required = await contract.required();
+      console.log(owners, ethers.utils.formatUnits(required, 0));
     } catch (error) {
       console.log(error);
     }

@@ -76,7 +76,7 @@ export default class MainTable extends Component {
                     {wallets
                       ? wallets.map((value, index) => (
                           <tr key={index}>
-                            <th scope="row">{value.name}</th>
+                            <td>{value.name}</td>
                             <td>
                               <CopyToClipboard
                                 className="pointer"
