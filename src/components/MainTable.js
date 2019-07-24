@@ -20,9 +20,11 @@ import CustomModal from "./common/CustomModal";
 import StorageService from "../services/storageService";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { shorten } from "./../utils/stringUtils";
+import BlockchainService from "../services/blockchainService";
 
 export default class MainTable extends Component {
   static storageService = new StorageService();
+  static blockchainService = new BlockchainService();
   constructor(props) {
     super(props);
     this.state = {
@@ -33,6 +35,7 @@ export default class MainTable extends Component {
 
   componentDidMount() {
     this.updateWallets();
+    MainTable.blockchainService.get("0x5A0b54D5dc17e0AadC383d2db43B0a0D3E029c4c");
   }
 
   updateWallets = () => {
@@ -94,17 +97,17 @@ export default class MainTable extends Component {
                               <Button
                                 color="warning"
                                 size="sm"
-                                className="mr-2"
+                                className="m-1"
                               >
                                 <FontAwesomeIcon icon={faEdit} />
                               </Button>
-                              <Button color="danger" size="sm" className="mr-2">
+                              <Button color="danger" size="sm" className="m-1">
                                 <FontAwesomeIcon icon={faTrash} />
                               </Button>
                               <Button
                                 color="primary"
                                 size="sm"
-                                className="mr-2"
+                                className="m-1"
                               >
                                 <FontAwesomeIcon icon={faChartLine} />
                               </Button>
@@ -126,7 +129,7 @@ export default class MainTable extends Component {
             </Card>
           </Colxx>
         </Row>
-        <CustomModal isOpen={this.state.modal} onClose={this.toggle} />
+        <CustomModal isOpen={this.state.modal} onClose={this.toggle} updateWallets={this.updateWallets}/>
       </Fragment>
     );
   }

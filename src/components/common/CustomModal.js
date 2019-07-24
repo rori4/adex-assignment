@@ -18,11 +18,12 @@ export default class CustomModal extends Component {
   static storageService = new StorageService();
   constructor(props) {
     super(props);
-    this.state = {
+    this.initialState = {
       name: "",
       address: "",
       errors: {}
     };
+    this.state = this.initialState;
   }
 
   handleChange = e => {
@@ -30,17 +31,24 @@ export default class CustomModal extends Component {
   };
 
   handleSubmit = () => {
-     this.checkValidity();
-     if(!this.state.errors) {
-         this.saveToLocalStorage();
-     } else {
-         //TODO: Toaster
-     }
-  }
+    this.checkValidity();
+    if (Object.keys(this.state.errors).length === 0) {
+      this.saveToLocalStorage();
+      this.clearState();
+      this.props.onClose();
+      this.props.updateWallets();
+    } else {
+      //TODO: Toaster
+    }
+  };
 
   checkValidity = () => {
     let errors = walletValidator(this.state);
     this.setState({ errors });
+  };
+
+  clearState = () => {
+      this.setState(this.initialState);
   };
 
   saveToLocalStorage = () => {
@@ -90,7 +98,7 @@ export default class CustomModal extends Component {
           </Form>
         </ModalBody>
         <ModalFooter>
-          <Button color="success" onClick={this.saveToLocalStorage}>
+          <Button color="success" onClick={this.handleSubmit}>
             Save
           </Button>
           <Button color="secondary" onClick={this.props.onClose}>
