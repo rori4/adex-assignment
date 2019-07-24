@@ -8,9 +8,11 @@ import {
   Form,
   FormGroup,
   Label,
-  Input
+  Input,
+  FormFeedback
 } from "reactstrap";
 import StorageService from "../../services/storageService";
+import walletValidator from "../../utils/validators/walletValidator";
 
 export default class CustomModal extends Component {
   static storageService = new StorageService();
@@ -18,13 +20,28 @@ export default class CustomModal extends Component {
     super(props);
     this.state = {
       name: "",
-      address: ""
+      address: "",
+      errors: {}
     };
   }
 
-  handleChange = (e) => {
+  handleChange = e => {
     this.setState({ [e.target.name]: e.target.value });
+  };
+
+  handleSubmit = () => {
+     this.checkValidity();
+     if(!this.state.errors) {
+         this.saveToLocalStorage();
+     } else {
+         //TODO: Toaster
+     }
   }
+
+  checkValidity = () => {
+    let errors = walletValidator(this.state);
+    this.setState({ errors });
+  };
 
   saveToLocalStorage = () => {
     const { name, address } = this.state;
@@ -32,6 +49,7 @@ export default class CustomModal extends Component {
   };
 
   render() {
+    const { errors } = this.state;
     return (
       <Modal
         isOpen={this.props.isOpen}
@@ -46,6 +64,7 @@ export default class CustomModal extends Component {
             <FormGroup>
               <Label for="name">Wallet Name</Label>
               <Input
+                invalid={errors.name ? true : false}
                 type="text"
                 name="name"
                 value={this.state.name}
@@ -53,10 +72,12 @@ export default class CustomModal extends Component {
                 placeholder="Give the wallet a name"
                 onChange={this.handleChange}
               />
+              <FormFeedback>{errors.name}</FormFeedback>
             </FormGroup>
             <FormGroup>
               <Label for="exampleEmail">Address</Label>
               <Input
+                invalid={errors.address ? true : false}
                 type="text"
                 name="address"
                 value={this.state.address}
@@ -64,6 +85,7 @@ export default class CustomModal extends Component {
                 placeholder="Enter mutlisignature wallet address here..."
                 onChange={this.handleChange}
               />
+              <FormFeedback>{errors.address}</FormFeedback>
             </FormGroup>
           </Form>
         </ModalBody>

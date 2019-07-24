@@ -70,40 +70,58 @@ export default class MainTable extends Component {
                     </tr>
                   </thead>
                   <tbody>
-                    {wallets.map((value, index) => (
-                      <tr key={index}>
-                        <th scope="row">{value.name}</th>
-                        <td>
-                          <CopyToClipboard
-                            className="pointer"
-                            text={value.address}
-                            onCopy={() => {
-                              console.log("Copied to clip");
-                            }}
-                          >
-                            <Badge color="secondary">
-                              {shorten(value.address)}
-                            </Badge>
-                          </CopyToClipboard>
-                        </td>
-                        <td>Otto</td>
-                        <td>@mdo</td>
-                        <td>@mdo</td>
-                        <td>
-                          <Button color="warning" size="sm" className="mr-2">
-                            <FontAwesomeIcon icon={faEdit} />
-                          </Button>
-                          <Button color="danger" size="sm" className="mr-2">
-                            <FontAwesomeIcon icon={faTrash} />
-                          </Button>
-                          <Button color="primary" size="sm" className="mr-2">
-                            <FontAwesomeIcon icon={faChartLine} />
-                          </Button>
-                        </td>
-                      </tr>
-                    ))}
+                    {wallets
+                      ? wallets.map((value, index) => (
+                          <tr key={index}>
+                            <th scope="row">{value.name}</th>
+                            <td>
+                              <CopyToClipboard
+                                className="pointer"
+                                text={value.address}
+                                onCopy={() => {
+                                  console.log("Copied to clip");
+                                }}
+                              >
+                                <Badge color="secondary">
+                                  {shorten(value.address)}
+                                </Badge>
+                              </CopyToClipboard>
+                            </td>
+                            <td>Otto</td>
+                            <td>@mdo</td>
+                            <td>@mdo</td>
+                            <td>
+                              <Button
+                                color="warning"
+                                size="sm"
+                                className="mr-2"
+                              >
+                                <FontAwesomeIcon icon={faEdit} />
+                              </Button>
+                              <Button color="danger" size="sm" className="mr-2">
+                                <FontAwesomeIcon icon={faTrash} />
+                              </Button>
+                              <Button
+                                color="primary"
+                                size="sm"
+                                className="mr-2"
+                              >
+                                <FontAwesomeIcon icon={faChartLine} />
+                              </Button>
+                            </td>
+                          </tr>
+                        ))
+                      : null}
                   </tbody>
                 </Table>
+                {wallets ? null : (
+                  <div className="text-center">
+                    No wallets. Add wallet{" "}
+                    <a href="/#" onClick={this.toggle}>
+                      now
+                    </a>
+                  </div>
+                )}
               </CardBody>
             </Card>
           </Colxx>
@@ -113,42 +131,3 @@ export default class MainTable extends Component {
     );
   }
 }
-
-/*
-                <Table hover bordered>
-                  <thead>
-                    <tr>
-                      <th>Name</th>
-                      <th>Contract</th>
-                      <th>Owners</th>
-                      <th>Daily Limit</th>
-                      <th>Confirsm</th>
-                      <th>Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {wallets.map((value, index) => (
-                      <tr>
-                        <th scope="row">{value.name}</th>
-                        <td>{value.address}</td>
-                        <td>Otto</td>
-                        <td>@mdo</td>
-                        <td>@mdo</td>
-                        <td>
-                          <Button color="success">
-                            <FontAwesomeIcon icon={faPlusSquare} />
-                          </Button>
-                          <Button color="success">
-                            <FontAwesomeIcon icon={faPlusSquare} />
-                          </Button>
-                          <Button color="success">
-                            <FontAwesomeIcon icon={faPlusSquare} />
-                          </Button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </Table>
-
-
-*/
