@@ -35,7 +35,7 @@ export default class MainTable extends Component {
 
   componentDidMount() {
     this.updateWallets();
-    MainTable.blockchainService.get("0x5A0b54D5dc17e0AadC383d2db43B0a0D3E029c4c");
+    MainTable.blockchainService.getWalletStats("0x3EB01B3391EA15CE752d01Cf3D3F09deC596F650");
   }
 
   updateWallets = () => {
