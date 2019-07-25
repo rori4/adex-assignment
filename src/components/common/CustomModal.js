@@ -67,6 +67,11 @@ export default class CustomModal extends Component {
     }
   };
 
+  closeModal = () => {
+    this.clearState();
+    this.props.onClose();
+  }
+
   render() {
     const { errors } = this.state;
     return (
@@ -112,7 +117,7 @@ export default class CustomModal extends Component {
           <Button color="success" onClick={this.handleSubmit}>
             Save
           </Button>
-          <Button color="secondary" onClick={this.props.onClose}>
+          <Button color="secondary" onClick={this.closeModal}>
             Cancel
           </Button>
         </ModalFooter>

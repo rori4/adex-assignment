@@ -20,22 +20,22 @@ import CustomModal from "./common/CustomModal";
 import StorageService from "../services/storageService";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { shorten, badgeColorSwitcher } from "./../utils/stringUtils";
-import BlockchainService from "../services/blockchainService";
+import { toast } from "react-toastify";
+import SweetAlert from "sweetalert-react";
 
 export default class MainTable extends Component {
   constructor(props) {
     super(props);
     this.state = {
       modal: false,
+      deleteAlert: false,
+      selectedContract: false,
       wallets: []
     };
   }
 
   componentDidMount() {
     this.updateWallets();
-    BlockchainService.getWalletStats(
-      "0x3EB01B3391EA15CE752d01Cf3D3F09deC596F650"
-    );
   }
 
   updateWallets = () => {
@@ -47,6 +47,13 @@ export default class MainTable extends Component {
     this.setState(prevState => ({
       modal: !prevState.modal
     }));
+  };
+
+  handleDeleteConfirm = () => {
+    console.log("DELETE");
+    StorageService.delete(this.state.selectedContract);
+    this.updateWallets();
+    this.setState({ deleteAlert: false, selectedContract: false });
   };
 
   render() {
@@ -82,7 +89,14 @@ export default class MainTable extends Component {
                                 className="pointer"
                                 text={value.address}
                                 onCopy={() => {
-                                  console.log("Copied to clip");
+                                  toast.info(
+                                    `${shorten(
+                                      value.address
+                                    )} has been copied to clipboard`,
+                                    {
+                                      position: toast.POSITION.BOTTOM_CENTER
+                                    }
+                                  );
                                 }}
                               >
                                 <Badge color="secondary">
@@ -97,7 +111,15 @@ export default class MainTable extends Component {
                                       className="pointer mr-1"
                                       text={owner}
                                       onCopy={() => {
-                                        console.log("Copied to clip");
+                                        toast.info(
+                                          `${shorten(
+                                            owner
+                                          )} has been copied to clipboard`,
+                                          {
+                                            position:
+                                              toast.POSITION.BOTTOM_CENTER
+                                          }
+                                        );
                                       }}
                                     >
                                       <Badge color={badgeColorSwitcher(i)}>
@@ -121,7 +143,17 @@ export default class MainTable extends Component {
                               <Button color="warning" size="sm" className="m-1">
                                 <FontAwesomeIcon icon={faEdit} />
                               </Button>
-                              <Button color="danger" size="sm" className="m-1">
+                              <Button
+                                color="danger"
+                                size="sm"
+                                className="m-1"
+                                onClick={() =>
+                                  this.setState({
+                                    deleteAlert: true,
+                                    selectedContract: value.address
+                                  })
+                                }
+                              >
                                 <FontAwesomeIcon icon={faTrash} />
                               </Button>
                               <Button color="primary" size="sm" className="m-1">
@@ -133,7 +165,7 @@ export default class MainTable extends Component {
                       : null}
                   </tbody>
                 </Table>
-                {wallets ? null : (
+                {wallets.length !== 0 ? null : (
                   <div className="text-center">
                     No wallets. Add wallet{" "}
                     <a href="/#" onClick={this.toggle}>
@@ -145,6 +177,20 @@ export default class MainTable extends Component {
             </Card>
           </Colxx>
         </Row>
+        <SweetAlert
+          show={this.state.deleteAlert}
+          onConfirm={() => this.handleDeleteConfirm()}
+          type="warning"
+          confirmButtonColor="#DC3545"
+          showCancelButton
+          confirmButtonText="Yes, delete it!"
+          title={`Are you sure you want to delete ${
+            this.state.selectedContract
+              ? shorten(this.state.selectedContract)
+              : null
+          } contract?`}
+          text="This will delete the contract and all of the stats about it!"
+        />
         <CustomModal
           isOpen={this.state.modal}
           onClose={this.toggle}

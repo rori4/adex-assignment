@@ -10,10 +10,10 @@ const StorageService = {
     }
   },
   delete(address) {
-    let newWallets = this.getAll().filter(wallet => {
+    let newWallets = StorageService.getAll().filter(wallet => {
       return wallet.address !== address;
     });
-    this.setItem(STORAGE_KEY, JSON.stringify(newWallets));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(newWallets));
   },
   getByAddress(address) {
     return this.getAll().filter(wallet => {
