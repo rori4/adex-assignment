@@ -8,6 +8,7 @@ import "sweetalert/dist/sweetalert.css";
 import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
 import "./assets/css/style.css";
+import "./assets/css/icons.css";
 import "./assets/custom.css";
 
 function App() {

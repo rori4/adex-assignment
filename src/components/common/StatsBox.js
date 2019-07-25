@@ -3,20 +3,23 @@ import React, { Component } from "react";
 export default class StatsBox extends Component {
   render() {
     return (
-      <div class="card-box widget-box-two widget-two-custom">
-        <i class="mdi mdi-currency-usd widget-two-icon" />
-        <div class="wigdet-two-content">
+      <div className="card-box widget-box-two widget-two-custom">
+        <i
+          className={
+            this.props.mdiIcon
+              ? `mdi widget-two-icon ${this.props.mdiIcon}`
+              : ""
+          }
+        />
+        <div className="wigdet-two-content">
           <p
-            class="m-0 text-uppercase font-bold font-secondary text-overflow"
+            className="m-0 text-uppercase font-bold font-secondary text-overflow"
             title="Statistics"
           >
-            Total Revenue
+            {this.props.title}
           </p>
-          <h2 class="font-600">
-            <span>
-              <i class="mdi mdi-arrow-up" />
-            </span>{" "}
-            <span data-plugin="counterup">65841</span>
+          <h2 className="font-600">
+            <span data-plugin="counterup">{this.props.value}</span>
           </h2>
         </div>
       </div>

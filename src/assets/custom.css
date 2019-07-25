@@ -13,7 +13,11 @@ body {
   background-image: url("./ethereum.svg");
   background-repeat: no-repeat;
   background-attachment: fixed;
-  background-position: calc(100%) calc(100% + 70px);
+  background-position: calc(50%) calc(100% + 80px);
+}
+
+.widget-box-two .widget-two-icon {
+  top: 20px;
 }
 
 span.logo {
@@ -59,6 +63,10 @@ and also iPads specifically.
     text-align: none;
   }
 
+  .navbar-nav .nav-link {
+    padding-left: 10px;
+  }
+
   /* Hide table headers (but not display: none;, for accessibility) */
   thead tr {
     position: absolute;
@@ -85,15 +93,15 @@ and also iPads specifically.
     left: 6px;
     width: 45%;
     padding-right: 10px;
-	white-space: nowrap;
+    white-space: nowrap;
   }
 
   /*
 	Label the data
 	*/
   td:nth-of-type(1):before {
-	content: "Name";
-	vertical-align: middle !important;
+    content: "Name";
+    vertical-align: middle !important;
   }
   td:nth-of-type(2):before {
     content: "Contract";

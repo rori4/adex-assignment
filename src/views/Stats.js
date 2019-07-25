@@ -8,10 +8,10 @@ export default class Home extends Component {
       <DefaultLayout>
         <div className="row">
           <div class="col-xl-3 col-sm-6">
-            <StatsBox />
+            <StatsBox title="first item" mdiIcon="mdi-minecraft" value="20000"/>
           </div>
           <div class="col-xl-3 col-sm-6">
-            <StatsBox />
+            <StatsBox icon=""/>
           </div>
           <div class="col-xl-3 col-sm-6">
             <StatsBox />

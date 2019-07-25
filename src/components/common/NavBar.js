@@ -12,6 +12,8 @@ import {
   DropdownMenu,
   DropdownItem
 } from "reactstrap";
+import { faGithub } from "@fortawesome/free-brands-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import logo from "../../logo.svg";
 
 export default class NavBar extends React.Component {
@@ -47,7 +49,8 @@ export default class NavBar extends React.Component {
           <Collapse isOpen={this.state.isOpen} navbar>
             <Nav className="ml-auto" navbar>
               <NavItem>
-                <NavLink href="https://github.com/rori4/adex-assignment">
+                <NavLink href="https://github.com/rori4/adex-assignment" className="h6">
+                  <FontAwesomeIcon icon={faGithub} className="mr-2"/>
                   GitHub
                 </NavLink>
               </NavItem>
