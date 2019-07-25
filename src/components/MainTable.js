@@ -4,6 +4,7 @@ import {
   Card,
   CardBody,
   CardTitle,
+  CardSubtitle,
   Button,
   Table,
   Badge
@@ -85,7 +86,14 @@ export default class MainTable extends Component {
                 >
                   <FontAwesomeIcon icon={faPlusSquare} /> Add Contract
                 </Button>
-                <CardTitle>Multi Signature Wallet Contracts</CardTitle>
+                <CardTitle className="h3">
+                  Multi Signature Wallet Contracts
+                </CardTitle>
+                {wallets && wallets.length !== 0 ? (
+                  <CardSubtitle className="text-muted h6 mb-2">
+                    HINT: You can copy addresses by clicking on them
+                  </CardSubtitle>
+                ) : null}
                 <Table hover bordered>
                   <thead>
                     <tr>

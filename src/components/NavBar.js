@@ -12,7 +12,7 @@ import {
   DropdownMenu,
   DropdownItem
 } from "reactstrap";
-import logo from "../assets/eth wallet logo.svg";
+import logo from "../logo.svg";
 
 export default class NavBar extends React.Component {
   constructor(props) {
