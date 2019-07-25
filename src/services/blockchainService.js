@@ -48,7 +48,6 @@ const BlockchainService = {
         dailyLimit: ethers.utils.formatEther(dailyLimit)
       };
     } catch (error) {
-      console.log(error);
       return false;
     }
   }

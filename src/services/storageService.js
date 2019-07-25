@@ -16,9 +16,20 @@ const StorageService = {
     });
     localStorage.setItem(STORAGE_KEY, JSON.stringify(newWallets));
   },
+  updateWalletData(address, newData) {
+    let allData = StorageService.getAll();
+    allData.forEach((element, index) => {
+      if (element.address === address) {
+        allData[index].name = newData.name;
+        newData.owners.forEach(el => {
+          pushToArray(allData[index].owners, el);
+        });
+      }
+    });
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(allData));
+  },
   getByAddress(address) {
-    StorageService.createStorageIfNotExist();
-    return this.getAll().filter(wallet => {
+    return this.getAll().find(wallet => {
       return wallet.address === address;
     });
   },
@@ -27,9 +38,20 @@ const StorageService = {
       localStorage.setItem(STORAGE_KEY, JSON.stringify([]));
   },
   getAll() {
-    StorageService.createStorageIfNotExist();
+    if (!localStorage.getItem(STORAGE_KEY)) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify([]));
+    }
     return JSON.parse(localStorage.getItem(STORAGE_KEY));
   }
 };
+
+function pushToArray(arr, obj) {
+  const index = arr.findIndex(e => e.address === obj.address);
+  if (index === -1) {
+    arr.push(obj);
+  } else {
+    arr[index] = obj;
+  }
+}
 
 export default StorageService;

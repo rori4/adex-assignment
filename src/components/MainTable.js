@@ -32,6 +32,7 @@ export default class MainTable extends Component {
       editModal: false,
       deleteAlert: false,
       selectedContract: false,
+      selectedContractDetails: {},
       wallets: []
     };
   }
@@ -51,9 +52,14 @@ export default class MainTable extends Component {
     }));
   };
 
-  toggleEdit = () => {
+  toggleEdit = address => {
+    const selectedContractDetails = address
+      ? StorageService.getByAddress(address)
+      : {};
     this.setState(prevState => ({
-      editModal: !prevState.editModal
+      editModal: !prevState.editModal,
+      selectedContract: address ? address : false,
+      selectedContractDetails
     }));
   };
 
@@ -65,6 +71,7 @@ export default class MainTable extends Component {
 
   render() {
     const { wallets } = this.state;
+    const { name, owners, address } = this.state.selectedContractDetails;
     return (
       <Fragment>
         <Row className="mb-5">
@@ -135,7 +142,9 @@ export default class MainTable extends Component {
                                       }}
                                     >
                                       <Badge color={badgeColorSwitcher(i)}>
-                                        {shorten(owner.address)}
+                                        {owner.name
+                                          ? owner.name
+                                          : shorten(owner.address)}
                                       </Badge>
                                     </CopyToClipboard>
                                   ))
@@ -156,7 +165,7 @@ export default class MainTable extends Component {
                                 color="warning"
                                 size="sm"
                                 className="m-1"
-                                onClick={this.toggleEdit}
+                                onClick={() => this.toggleEdit(value.address)}
                               >
                                 <FontAwesomeIcon icon={faEdit} />
                               </Button>
@@ -220,6 +229,9 @@ export default class MainTable extends Component {
           isOpen={this.state.editModal}
           onClose={this.toggleEdit}
           updateWallets={this.updateWallets}
+          name={name}
+          owners={owners}
+          address={address}
         />
       </Fragment>
     );

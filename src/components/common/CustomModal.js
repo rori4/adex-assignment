@@ -28,6 +28,7 @@ export default class CustomModal extends Component {
   }
 
   handleChange = e => {
+    console.log(e)
     this.setState({ [e.target.name]: e.target.value });
   };
 
@@ -89,7 +90,7 @@ export default class CustomModal extends Component {
         autoFocus={false}
       >
         <ModalHeader>
-          Add a multi-signature wallet contract to the list
+          Add Multisignature Wallet Contract
         </ModalHeader>
         <ModalBody>
           <Form>

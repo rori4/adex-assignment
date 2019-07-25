@@ -8,7 +8,10 @@ async function walletValidator(state) {
   const isMultisig = isCryptoAddress
     ? await BlockchainService.getWalletStats(address)
     : false;
-  const exists = StorageService.getByAddress(address).length !== 0;
+  const exists =
+    isMultisig 
+      ? StorageService.getByAddress(address) && StorageService.getByAddress(address).length !== 0
+      : false;
   let errors = {};
   name === undefined || name === "" || name.length === 0
     ? (errors.name = "Name is required")
