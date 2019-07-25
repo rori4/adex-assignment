@@ -13,9 +13,9 @@ import {
 } from "reactstrap";
 import StorageService from "../../services/storageService";
 import walletValidator from "../../utils/validators/walletValidator";
+import BlockchainService from "./../../services/blockchainService";
 
 export default class CustomModal extends Component {
-  static storageService = new StorageService();
   constructor(props) {
     super(props);
     this.initialState = {
@@ -30,30 +30,41 @@ export default class CustomModal extends Component {
     this.setState({ [e.target.name]: e.target.value });
   };
 
-  handleSubmit = () => {
-    this.checkValidity();
-    if (Object.keys(this.state.errors).length === 0) {
-      this.saveToLocalStorage();
-      this.clearState();
-      this.props.onClose();
-      this.props.updateWallets();
-    } else {
-      //TODO: Toaster
-    }
+  handleSubmit = async () => {
+    let errors = await walletValidator(this.state);
+    this.setState({ errors }, async ()=>{
+      if (Object.keys(this.state.errors).length === 0) {
+        this.props.onClose();
+        await this.saveToLocalStorage();
+        this.clearState();
+        this.props.updateWallets();
+      } else {
+        //TODO: Toaster
+      }
+    });
   };
 
-  checkValidity = () => {
+  checkValidity = async () => {
     let errors = walletValidator(this.state);
     this.setState({ errors });
   };
 
   clearState = () => {
-      this.setState(this.initialState);
+    this.setState(this.initialState);
   };
 
-  saveToLocalStorage = () => {
-    const { name, address } = this.state;
-    CustomModal.storageService.add({ name, address });
+  saveToLocalStorage = async () => {
+    try {
+      const { name, address } = this.state;
+      const {
+        owners,
+        required,
+        dailyLimit
+      } = await BlockchainService.getWalletStats(address);
+      StorageService.add({ name, address, owners, required, dailyLimit });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   render() {

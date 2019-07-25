@@ -19,12 +19,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import CustomModal from "./common/CustomModal";
 import StorageService from "../services/storageService";
 import { CopyToClipboard } from "react-copy-to-clipboard";
-import { shorten } from "./../utils/stringUtils";
+import { shorten, badgeColorSwitcher } from "./../utils/stringUtils";
 import BlockchainService from "../services/blockchainService";
 
 export default class MainTable extends Component {
-  static storageService = new StorageService();
-  static blockchainService = new BlockchainService();
   constructor(props) {
     super(props);
     this.state = {
@@ -35,11 +33,13 @@ export default class MainTable extends Component {
 
   componentDidMount() {
     this.updateWallets();
-    MainTable.blockchainService.getWalletStats("0x3EB01B3391EA15CE752d01Cf3D3F09deC596F650");
+    BlockchainService.getWalletStats(
+      "0x3EB01B3391EA15CE752d01Cf3D3F09deC596F650"
+    );
   }
 
   updateWallets = () => {
-    const wallets = MainTable.storageService.getAll();
+    const wallets = StorageService.getAll();
     this.setState({ wallets });
   };
 
@@ -68,7 +68,7 @@ export default class MainTable extends Component {
                       <th>Contract</th>
                       <th>Owners</th>
                       <th>Daily Limit</th>
-                      <th>Confirsm</th>
+                      <th>Confirms</th>
                       <th>Actions</th>
                     </tr>
                   </thead>
@@ -90,25 +90,41 @@ export default class MainTable extends Component {
                                 </Badge>
                               </CopyToClipboard>
                             </td>
-                            <td>Otto</td>
-                            <td>@mdo</td>
-                            <td>@mdo</td>
                             <td>
-                              <Button
-                                color="warning"
-                                size="sm"
-                                className="m-1"
-                              >
+                              {value.owners
+                                ? value.owners.map((owner, i) => (
+                                    <CopyToClipboard
+                                      className="pointer mr-1"
+                                      text={owner}
+                                      onCopy={() => {
+                                        console.log("Copied to clip");
+                                      }}
+                                    >
+                                      <Badge color={badgeColorSwitcher(i)}>
+                                        {shorten(owner)}
+                                      </Badge>
+                                    </CopyToClipboard>
+                                  ))
+                                : "No owners"}
+                            </td>
+                            <td>
+                              {value.dailyLimit
+                                ? `${value.dailyLimit} ETH`
+                                : "No daily limit"}
+                            </td>
+                            <td>
+                              {value.required && value.owners
+                                ? `${value.required}/${value.owners.length}`
+                                : "No required confirms"}
+                            </td>
+                            <td>
+                              <Button color="warning" size="sm" className="m-1">
                                 <FontAwesomeIcon icon={faEdit} />
                               </Button>
                               <Button color="danger" size="sm" className="m-1">
                                 <FontAwesomeIcon icon={faTrash} />
                               </Button>
-                              <Button
-                                color="primary"
-                                size="sm"
-                                className="m-1"
-                              >
+                              <Button color="primary" size="sm" className="m-1">
                                 <FontAwesomeIcon icon={faChartLine} />
                               </Button>
                             </td>
@@ -129,7 +145,11 @@ export default class MainTable extends Component {
             </Card>
           </Colxx>
         </Row>
-        <CustomModal isOpen={this.state.modal} onClose={this.toggle} updateWallets={this.updateWallets}/>
+        <CustomModal
+          isOpen={this.state.modal}
+          onClose={this.toggle}
+          updateWallets={this.updateWallets}
+        />
       </Fragment>
     );
   }

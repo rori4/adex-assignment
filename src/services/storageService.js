@@ -1,32 +1,28 @@
-export default class StorageService {
-  constructor() {
-    this.wallets = `wallets`;
-  }
-
+const STORAGE_KEY = "wallets";
+const StorageService = {
   add(wallet) {
-    if (localStorage.getItem(this.wallets)) {
-      let wallets = JSON.parse(localStorage.getItem(this.wallets));
+    if (localStorage.getItem(STORAGE_KEY)) {
+      let wallets = JSON.parse(localStorage.getItem(STORAGE_KEY));
       wallets.push(wallet);
-      localStorage.setItem(this.wallets, JSON.stringify(wallets));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(wallets));
     } else {
-      localStorage.setItem(this.wallets, JSON.stringify([wallet]));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify([wallet]));
     }
-  }
-
+  },
   delete(address) {
     let newWallets = this.getAll().filter(wallet => {
       return wallet.address !== address;
     });
-    this.setItem(this.wallets, JSON.stringify(newWallets));
-  }
-
+    this.setItem(STORAGE_KEY, JSON.stringify(newWallets));
+  },
   getByAddress(address) {
     return this.getAll().filter(wallet => {
       return wallet.address === address;
     });
-  }
-
+  },
   getAll() {
-    return JSON.parse(localStorage.getItem(this.wallets));
+    return JSON.parse(localStorage.getItem(STORAGE_KEY));
   }
-}
+};
+
+export default StorageService;
