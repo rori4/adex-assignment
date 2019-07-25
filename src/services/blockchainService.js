@@ -36,8 +36,14 @@ const BlockchainService = {
       let owners = await contract.getOwners();
       let required = await contract.required();
       let dailyLimit = await contract.dailyLimit();
+      let ownersWithNames = [];
+      if (Array.isArray(owners)) {
+        owners.map((address) => {
+          ownersWithNames.push({ name: "", address: address });
+        });
+      }
       return {
-        owners,
+        owners: ownersWithNames,
         required: Number(required),
         dailyLimit: ethers.utils.formatEther(dailyLimit)
       };
@@ -45,7 +51,7 @@ const BlockchainService = {
       console.log(error);
       return false;
     }
-  },
+  }
 };
 
 export default BlockchainService;

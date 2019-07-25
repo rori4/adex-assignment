@@ -21,7 +21,8 @@ export default class CustomModal extends Component {
     this.initialState = {
       name: "",
       address: "",
-      errors: {}
+      errors: {},
+      disableSubmit: false
     };
     this.state = this.initialState;
   }
@@ -31,26 +32,17 @@ export default class CustomModal extends Component {
   };
 
   handleSubmit = async () => {
+    this.setState({ disableSubmit: true });
     let errors = await walletValidator(this.state);
-    this.setState({ errors }, async ()=>{
+    this.setState({ errors }, async () => {
       if (Object.keys(this.state.errors).length === 0) {
         this.props.onClose();
         await this.saveToLocalStorage();
         this.clearState();
         this.props.updateWallets();
-      } else {
-        //TODO: Toaster
       }
     });
-  };
-
-  checkValidity = async () => {
-    let errors = walletValidator(this.state);
-    this.setState({ errors });
-  };
-
-  clearState = () => {
-    this.setState(this.initialState);
+    this.setState({ disableSubmit: false });
   };
 
   saveToLocalStorage = async () => {
@@ -67,20 +59,36 @@ export default class CustomModal extends Component {
     }
   };
 
+  handleKeyPress = event => {
+    if (event.key === "Enter") {
+      this.handleSubmit();
+    }
+  };
+
+  checkValidity = async () => {
+    let errors = walletValidator(this.state);
+    this.setState({ errors });
+  };
+
+  clearState = () => {
+    this.setState(this.initialState);
+  };
+
   closeModal = () => {
     this.clearState();
     this.props.onClose();
-  }
+  };
 
   render() {
-    const { errors } = this.state;
+    const { errors, disableSubmit } = this.state;
     return (
       <Modal
         isOpen={this.props.isOpen}
-        toggle={this.toggle}
         className={this.props.className}
+        onKeyPress={this.handleKeyPress}
+        autoFocus={false}
       >
-        <ModalHeader toggle={this.toggle}>
+        <ModalHeader>
           Add a multi-signature wallet contract to the list
         </ModalHeader>
         <ModalBody>
@@ -88,6 +96,7 @@ export default class CustomModal extends Component {
             <FormGroup>
               <Label for="name">Wallet Name</Label>
               <Input
+                autoFocus={true}
                 invalid={errors.name ? true : false}
                 type="text"
                 name="name"
@@ -114,8 +123,12 @@ export default class CustomModal extends Component {
           </Form>
         </ModalBody>
         <ModalFooter>
-          <Button color="success" onClick={this.handleSubmit}>
-            Save
+          <Button
+            color="success"
+            onClick={this.handleSubmit}
+            disabled={disableSubmit}
+          >
+            {disableSubmit ? "Saving..." : "Save"}
           </Button>
           <Button color="secondary" onClick={this.closeModal}>
             Cancel

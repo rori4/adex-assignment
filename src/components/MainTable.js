@@ -17,17 +17,19 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import CustomModal from "./common/CustomModal";
-import StorageService from "../services/storageService";
+import EditModal from "./common/EditModal";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { shorten, badgeColorSwitcher } from "./../utils/stringUtils";
 import { toast } from "react-toastify";
 import SweetAlert from "sweetalert-react";
+import StorageService from "../services/storageService";
 
 export default class MainTable extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      modal: false,
+      addModal: false,
+      editModal: false,
       deleteAlert: false,
       selectedContract: false,
       wallets: []
@@ -43,14 +45,19 @@ export default class MainTable extends Component {
     this.setState({ wallets });
   };
 
-  toggle = () => {
+  toggleAdd = () => {
     this.setState(prevState => ({
-      modal: !prevState.modal
+      addModal: !prevState.addModal
+    }));
+  };
+
+  toggleEdit = () => {
+    this.setState(prevState => ({
+      editModal: !prevState.editModal
     }));
   };
 
   handleDeleteConfirm = () => {
-    console.log("DELETE");
     StorageService.delete(this.state.selectedContract);
     this.updateWallets();
     this.setState({ deleteAlert: false, selectedContract: false });
@@ -64,7 +71,11 @@ export default class MainTable extends Component {
           <Colxx xxs="12">
             <Card className="mb-4">
               <CardBody>
-                <Button className="mb-2" color="success" onClick={this.toggle}>
+                <Button
+                  className="mb-2"
+                  color="success"
+                  onClick={this.toggleAdd}
+                >
                   <FontAwesomeIcon icon={faPlusSquare} /> Add Contract
                 </Button>
                 <CardTitle>Multi Signature Wallet Contracts</CardTitle>
@@ -108,12 +119,13 @@ export default class MainTable extends Component {
                               {value.owners
                                 ? value.owners.map((owner, i) => (
                                     <CopyToClipboard
+                                      key={i}
                                       className="pointer mr-1"
-                                      text={owner}
+                                      text={owner.address}
                                       onCopy={() => {
                                         toast.info(
                                           `${shorten(
-                                            owner
+                                            owner.address
                                           )} has been copied to clipboard`,
                                           {
                                             position:
@@ -123,7 +135,7 @@ export default class MainTable extends Component {
                                       }}
                                     >
                                       <Badge color={badgeColorSwitcher(i)}>
-                                        {shorten(owner)}
+                                        {shorten(owner.address)}
                                       </Badge>
                                     </CopyToClipboard>
                                   ))
@@ -140,7 +152,12 @@ export default class MainTable extends Component {
                                 : "No required confirms"}
                             </td>
                             <td>
-                              <Button color="warning" size="sm" className="m-1">
+                              <Button
+                                color="warning"
+                                size="sm"
+                                className="m-1"
+                                onClick={this.toggleEdit}
+                              >
                                 <FontAwesomeIcon icon={faEdit} />
                               </Button>
                               <Button
@@ -165,10 +182,10 @@ export default class MainTable extends Component {
                       : null}
                   </tbody>
                 </Table>
-                {wallets.length !== 0 ? null : (
+                {wallets && wallets.length !== 0 ? null : (
                   <div className="text-center">
                     No wallets. Add wallet{" "}
-                    <a href="/#" onClick={this.toggle}>
+                    <a href="/#" onClick={this.toggleAdd}>
                       now
                     </a>
                   </div>
@@ -180,6 +197,9 @@ export default class MainTable extends Component {
         <SweetAlert
           show={this.state.deleteAlert}
           onConfirm={() => this.handleDeleteConfirm()}
+          onCancel={() =>
+            this.setState({ deleteAlert: false, selectedContract: false })
+          }
           type="warning"
           confirmButtonColor="#DC3545"
           showCancelButton
@@ -192,8 +212,13 @@ export default class MainTable extends Component {
           text="This will delete the contract and all of the stats about it!"
         />
         <CustomModal
-          isOpen={this.state.modal}
-          onClose={this.toggle}
+          isOpen={this.state.addModal}
+          onClose={this.toggleAdd}
+          updateWallets={this.updateWallets}
+        />
+        <EditModal
+          isOpen={this.state.editModal}
+          onClose={this.toggleEdit}
           updateWallets={this.updateWallets}
         />
       </Fragment>
