@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import NavBar from "./../components/NavBar";
+import NavBar from "../components/common/NavBar";
 import { Container} from 'reactstrap';
 
 export default class DefaultLayout extends Component {
