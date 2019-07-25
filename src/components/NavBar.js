@@ -12,7 +12,7 @@ import {
   DropdownMenu,
   DropdownItem
 } from "reactstrap";
-import logo from "../logo.svg";
+import logo from "../assets/eth wallet logo.svg";
 
 export default class NavBar extends React.Component {
   constructor(props) {
@@ -41,7 +41,7 @@ export default class NavBar extends React.Component {
             >
               <image xlinkHref={logo} height={50} width={50} />
             </svg>
-            MultiSig Wallets
+            <span className="logo">MultiSig Wallets</span>
           </NavbarBrand>
           <NavbarToggler onClick={this.toggle} />
           <Collapse isOpen={this.state.isOpen} navbar>

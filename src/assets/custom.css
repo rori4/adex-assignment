@@ -15,6 +15,13 @@ body {
   background-attachment: fixed;
   background-position: calc(100%) calc(100% + 70px);
 }
+
+span.logo {
+  font-size: 25px;
+  font-variant: all-small-caps;
+  vertical-align: middle;
+  margin-left: 10px;
+}
 /* 
 Generic Styling, for Desktops/Laptops 
 */
