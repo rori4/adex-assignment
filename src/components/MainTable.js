@@ -22,6 +22,7 @@ import EditModal from "./common/EditModal";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { shorten, badgeColorSwitcher } from "./../utils/stringUtils";
 import { toast } from "react-toastify";
+import history from "../history";
 import SweetAlert from "sweetalert-react";
 import StorageService from "../services/storageService";
 
@@ -70,6 +71,12 @@ export default class MainTable extends Component {
     this.setState({ deleteAlert: false, selectedContract: false });
   };
 
+  redirectToStats = address => {
+    history.push("/stats/", {
+      address
+    });
+  };
+
   render() {
     const { wallets } = this.state;
     const { name, owners, address } = this.state.selectedContractDetails;
@@ -94,7 +101,7 @@ export default class MainTable extends Component {
                     HINT: You can copy addresses by clicking on them
                   </CardSubtitle>
                 ) : null}
-                <Table hover bordered>
+                <Table hover bordered className="main-table">
                   <thead>
                     <tr>
                       <th>Name</th>
@@ -190,7 +197,14 @@ export default class MainTable extends Component {
                               >
                                 <FontAwesomeIcon icon={faTrash} />
                               </Button>
-                              <Button color="primary" size="sm" className="m-1">
+                              <Button
+                                color="primary"
+                                size="sm"
+                                className="m-1"
+                                onClick={() =>
+                                  this.redirectToStats(value.address)
+                                }
+                              >
                                 <FontAwesomeIcon icon={faChartLine} />
                               </Button>
                             </td>

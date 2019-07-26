@@ -1,7 +1,8 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { Router, Route, Switch } from "react-router-dom";
 import Home from "./views/Home";
 import Stats from "./views/Stats";
+import history from "./history";
 import { ToastContainer } from "react-toastify";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "sweetalert/dist/sweetalert.css";
@@ -13,10 +14,10 @@ import "./assets/custom.css";
 
 function App() {
   return (
-    <Router>
+    <Router history={history}>
       <ToastContainer />
       <Switch>
-        <Route path="/stats" name="Statistics" component={Stats} />
+        <Route path="/stats/" name="Statistics" component={Stats} />
         <Route path="/" name="Home" component={Home} />
       </Switch>
     </Router>

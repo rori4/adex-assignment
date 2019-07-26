@@ -34,13 +34,13 @@ const BlockchainService = {
   },
   async getWalletStats(address) {
     try {
-      let contract = new ethers.Contract(address, abi, provider);
-      let owners = await contract.getOwners();
-      let required = await contract.required();
-      let dailyLimit = await contract.dailyLimit();
+      const contract = new ethers.Contract(address, abi, provider);
+      const owners = await contract.getOwners();
+      const required = await contract.required();
+      const dailyLimit = await contract.dailyLimit();
       let ownersWithNames = [];
       if (Array.isArray(owners)) {
-        owners.map((address) => {
+        owners.forEach((address) => {
           ownersWithNames.push({ name: "", address: address });
         });
       }
@@ -55,11 +55,14 @@ const BlockchainService = {
   },
   async getTransactionStats(address) {
     try {
-      let contract = new ethers.Contract(address, abi, provider);
-      const transactionCount = await contract.getTransactionCount(true, true);
+      let transactions = [];
+      const contract = new ethers.Contract(address, abi, provider);
+      const transactionCount = Number(await contract.getTransactionCount(true, true));
       for (let i = 0; i < transactionCount; i++) {
-            
+          const transaction = contract.transactions(i);
+          transactions.push(transaction);
       }
+      return await Promise.all(transactions);
     } catch (error) {
       console.log(error)
     }
