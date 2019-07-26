@@ -17,7 +17,9 @@ const abi = [
   "event RequirementChange(uint required)",
   "function getOwners() public constant returns (address[])",
   "function required() public constant returns (uint256)",
-  "function dailyLimit() public constant returns (uint256)"
+  "function dailyLimit() public constant returns (uint256)",
+  "function getTransactionCount(bool pending, bool executed) public constant returns (uint256 count)",
+  "function transactions(uint256) public constant returns (address destination, uint256 value, bytes data, bool executed)",
   //Those should be correct functions!!
 ];
 const BlockchainService = {
@@ -49,6 +51,17 @@ const BlockchainService = {
       };
     } catch (error) {
       return false;
+    }
+  },
+  async getTransactionStats(address) {
+    try {
+      let contract = new ethers.Contract(address, abi, provider);
+      const transactionCount = await contract.getTransactionCount(true, true);
+      for (let i = 0; i < transactionCount; i++) {
+            
+      }
+    } catch (error) {
+      console.log(error)
     }
   }
 };
