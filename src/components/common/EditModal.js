@@ -18,6 +18,7 @@ export default class EditModal extends Component {
   constructor(props) {
     super(props);
     this.initialState = {
+      address: "",
       owners: [],
       name: "",
       errors: {},
@@ -32,14 +33,14 @@ export default class EditModal extends Component {
       this.props.owners !== prevProps.owners
     ) {
       this.setState({
-        name: this.props.name,
-        owners: this.props.owners
+        name: this.props.name || "",
+        owners: this.props.owners || ""
       });
     }
   }
 
   handleChange = e => {
-    this.setState({ [e.target.name]: e.target.value });
+    this.setState({ name: e.target.value });
   };
 
   handleSubmit = async () => {
@@ -64,10 +65,6 @@ export default class EditModal extends Component {
     });
   };
 
-  checkValidity = async () => {
-    console.log("TODO: NEED TO CHECK IF FIRST NAME NOT EMPTY");
-  };
-
   clearState = () => {
     this.setState(this.initialState);
   };
@@ -78,7 +75,7 @@ export default class EditModal extends Component {
   };
 
   render() {
-    const { errors, disableSubmit, name, address, owners } = this.state;
+    const { errors, disableSubmit, owners } = this.state;
     return (
       <Modal
         isOpen={this.props.isOpen}
@@ -96,12 +93,14 @@ export default class EditModal extends Component {
                 invalid={errors.name ? true : false}
                 type="text"
                 name="name"
-                value={name}
+                value={this.state.name}
                 id="name"
                 placeholder="Give the wallet a name"
                 onChange={this.handleChange}
               />
-              <FormText color="muted">Wallet Address: {address}</FormText>
+              <FormText color="muted">
+                Wallet Address: {this.props.address}
+              </FormText>
               <FormFeedback>{errors.name}</FormFeedback>
             </FormGroup>
             {owners && owners.length > 0
