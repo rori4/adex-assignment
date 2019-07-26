@@ -1,14 +1,5 @@
 import React, { Component } from "react";
-import {
-  Row,
-  Card,
-  CardBody,
-  CardTitle,
-  CardSubtitle,
-  Button,
-  Table,
-  Badge
-} from "reactstrap";
+import { Row, Card, CardBody, Table, Badge } from "reactstrap";
 import { Colxx } from "../components/common/CustomBootstrap";
 import DefaultLayout from "../layouts/DefaultLayout";
 import StatsBox from "./../components/common/StatsBox";
@@ -22,7 +13,6 @@ import { toast } from "react-toastify";
 export default class Stats extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
       transactions: [],
       isLoading: true
@@ -140,7 +130,7 @@ export default class Stats extends Component {
                   <tbody>
                     {!isLoading
                       ? transactions.reverse().map((transaction, index) => (
-                          <tr>
+                          <tr key={index}>
                             <td>{transactions.length - index}</td>
                             <td>{transaction.destination}</td>
                             <td>{utils.formatEther(transaction.value)}</td>

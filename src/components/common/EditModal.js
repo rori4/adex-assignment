@@ -10,13 +10,9 @@ import {
   Label,
   Input,
   FormFeedback,
-  FormText,
-  Badge
+  FormText
 } from "reactstrap";
 import StorageService from "../../services/storageService";
-import walletValidator from "../../utils/validators/walletValidator";
-import BlockchainService from "./../../services/blockchainService";
-import { shorten } from "../../utils/stringUtils";
 
 export default class EditModal extends Component {
   constructor(props) {
@@ -90,9 +86,7 @@ export default class EditModal extends Component {
         onKeyPress={this.handleKeyPress}
         autoFocus={false}
       >
-        <ModalHeader>
-          Edit Multisignature Wallet
-        </ModalHeader>
+        <ModalHeader>Edit Multisignature Wallet</ModalHeader>
         <ModalBody>
           <Form>
             <FormGroup>

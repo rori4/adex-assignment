@@ -28,7 +28,7 @@ export default class CustomModal extends Component {
   }
 
   handleChange = e => {
-    console.log(e)
+    console.log(e);
     this.setState({ [e.target.name]: e.target.value });
   };
 
@@ -55,6 +55,7 @@ export default class CustomModal extends Component {
         dailyLimit
       } = await BlockchainService.getWalletStats(address);
       StorageService.add({ name, address, owners, required, dailyLimit });
+      BlockchainService.addEventListeners(address);
     } catch (error) {
       console.log(error);
     }
@@ -89,9 +90,7 @@ export default class CustomModal extends Component {
         onKeyPress={this.handleKeyPress}
         autoFocus={false}
       >
-        <ModalHeader>
-          Add Multisignature Wallet Contract
-        </ModalHeader>
+        <ModalHeader>Add Multisignature Wallet Contract</ModalHeader>
         <ModalBody>
           <Form>
             <FormGroup>

@@ -19,7 +19,7 @@ const abi = [
   "function required() public constant returns (uint256)",
   "function dailyLimit() public constant returns (uint256)",
   "function getTransactionCount(bool pending, bool executed) public constant returns (uint256 count)",
-  "function transactions(uint256) public constant returns (address destination, uint256 value, bytes data, bool executed)",
+  "function transactions(uint256) public constant returns (address destination, uint256 value, bytes data, bool executed)"
   //Those should be correct functions!!
 ];
 const BlockchainService = {
@@ -40,7 +40,7 @@ const BlockchainService = {
       const dailyLimit = await contract.dailyLimit();
       let ownersWithNames = [];
       if (Array.isArray(owners)) {
-        owners.forEach((address) => {
+        owners.forEach(address => {
           ownersWithNames.push({ name: "", address: address });
         });
       }
@@ -57,14 +57,50 @@ const BlockchainService = {
     try {
       let transactions = [];
       const contract = new ethers.Contract(address, abi, provider);
-      const transactionCount = Number(await contract.getTransactionCount(true, true));
+      const transactionCount = Number(
+        await contract.getTransactionCount(true, true)
+      );
       for (let i = 0; i < transactionCount; i++) {
-          const transaction = contract.transactions(i);
-          transactions.push(transaction);
+        const transaction = contract.transactions(i);
+        transactions.push(transaction);
       }
       return await Promise.all(transactions);
     } catch (error) {
-      console.log(error)
+      console.log(error);
+    }
+  },
+  async addEventListeners(address) {
+    try {
+      const contract = new ethers.Contract(address, abi, provider);
+      contract.on("Confirmation", (oldValue, newValue, event) => {
+        console.log("Event:", oldValue, newValue);
+      });
+      contract.on("Revocation", (oldValue, newValue, event) => {
+        console.log("Event:", oldValue, newValue);
+      });
+      contract.on("Submission", (oldValue, newValue, event) => {
+        console.log("Event:", oldValue, newValue);
+      });
+      contract.on("Execution", (oldValue, newValue, event) => {
+        console.log("Event:", oldValue, newValue);
+      });
+      contract.on("ExecutionFailure", (oldValue, newValue, event) => {
+        console.log("Event:", oldValue, newValue);
+      });
+      contract.on("Deposit", (oldValue, newValue, event) => {
+        console.log("Event:", oldValue, newValue);
+      });
+      contract.on("OwnerAddition", (oldValue, newValue, event) => {
+        console.log("Event:", oldValue, newValue);
+      });
+      contract.on("OwnerRemoval", (oldValue, newValue, event) => {
+        console.log("Event:", oldValue, newValue);
+      });
+      contract.on("RequirementChange", (oldValue, newValue, event) => {
+        console.log("Event:", oldValue, newValue);
+      });
+    } catch (error) {
+      console.log(error);
     }
   }
 };
