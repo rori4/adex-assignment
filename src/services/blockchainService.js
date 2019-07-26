@@ -1,5 +1,6 @@
 import { ethers } from "ethers";
-require("dotenv").config();
+import { toast } from "react-toastify";
+import { shorten } from "./../utils/stringUtils";
 
 var provider = new ethers.providers.InfuraProvider(
   "mainnet",
@@ -25,9 +26,9 @@ const abi = [
 const BlockchainService = {
   async getBalance(wallet) {
     try {
-      let balance = await ethers.getDefaultProvider().getBalance(wallet);
+      let balance = await provider.getBalance(wallet);
       let etherString = ethers.utils.formatEther(balance);
-      console.log("Balance: " + etherString);
+      return etherString;
     } catch (error) {
       console.log(error);
     }
@@ -69,38 +70,58 @@ const BlockchainService = {
       console.log(error);
     }
   },
-  async addEventListeners(address) {
+  async addEventListeners(address, callback) {
     try {
       const contract = new ethers.Contract(address, abi, provider);
       contract.on("Confirmation", (oldValue, newValue, event) => {
-        console.log("Event:", oldValue, newValue);
+        toast.success(
+          `${event.event} has been made by ${shorten(
+            event.args.sender
+          )} with ID:${Number(event.args.transactionId) + 1}`
+        );
+        callback();
       });
       contract.on("Revocation", (oldValue, newValue, event) => {
-        console.log("Event:", oldValue, newValue);
+        console.log("Event:", event);
       });
       contract.on("Submission", (oldValue, newValue, event) => {
-        console.log("Event:", oldValue, newValue);
+        console.log("New transaction submitted");
       });
       contract.on("Execution", (oldValue, newValue, event) => {
-        console.log("Event:", oldValue, newValue);
+        toast.info("New transaction submitted");
       });
       contract.on("ExecutionFailure", (oldValue, newValue, event) => {
-        console.log("Event:", oldValue, newValue);
+        toast.error("There was an execution failure");
       });
       contract.on("Deposit", (oldValue, newValue, event) => {
-        console.log("Event:", oldValue, newValue);
+        toast.success(
+          `${event.event} has been made by ${shorten(
+            event.args.sender
+          )} to ${shorten(event.address)} for ${ethers.utils.formatEther(
+            event.args.value
+          )} ETH`
+        );
+        callback();
       });
       contract.on("OwnerAddition", (oldValue, newValue, event) => {
-        console.log("Event:", oldValue, newValue);
+        toast.info("New owner added to the wallet");
       });
       contract.on("OwnerRemoval", (oldValue, newValue, event) => {
-        console.log("Event:", oldValue, newValue);
+        toast.info("An owner was removed from the wallet");
       });
       contract.on("RequirementChange", (oldValue, newValue, event) => {
-        console.log("Event:", oldValue, newValue);
+        toast.info("Wallet requirements have changed");
       });
     } catch (error) {
       console.log(error);
+    }
+  },
+  async removeEventListeners(address) {
+    try {
+      const contract = new ethers.Contract(address, abi, provider);
+      await contract.removeAllListeners();
+    } catch (error) {
+      console.log(error)
     }
   }
 };

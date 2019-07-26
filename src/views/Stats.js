@@ -15,20 +15,35 @@ export default class Stats extends Component {
     super(props);
     this.state = {
       transactions: [],
-      isLoading: true
+      isLoading: true,
+      balance: "?"
     };
+    this.updateStats = this.updateStats.bind(this);
   }
 
   async componentDidMount() {
     try {
-      let transactions = await BlockchainService.getTransactionStats(
-        history.location.state.address
+      BlockchainService.addEventListeners(
+        history.location.state.address,
+        this.updateStats
       );
-      this.setState({ transactions, isLoading: false });
+      this.updateStats();
     } catch (error) {
       console.log(error);
     }
   }
+
+  componentWillUnmount() {
+    BlockchainService.removeEventListeners(history.location.state.address);
+  }
+
+  updateStats = async () => {
+    let address = history.location.state.address;
+    let transactions = await BlockchainService.getTransactionStats(address);
+    const balance = await BlockchainService.getBalance(address);
+    if (transactions)
+      this.setState({ transactions, isLoading: false, balance });
+  };
 
   calculateAverageTransactionAmount() {
     const { transactions } = this.state;
@@ -36,7 +51,7 @@ export default class Stats extends Component {
     for (let i = 0; i < transactions.length; i++) {
       total += Number(utils.formatEther(transactions[i].value));
     }
-    return total > 0 ? (total / transactions.length).toFixed(2) : total;
+    return total > 0 ? (total / transactions.length).toFixed(4) : total;
   }
 
   countTransactionsByStatus(executed) {
@@ -49,12 +64,12 @@ export default class Stats extends Component {
   }
 
   render() {
-    const { transactions, isLoading } = this.state;
+    const { transactions, isLoading, balance } = this.state;
     const loadingString = "Loading...";
     return (
       <DefaultLayout>
         <h3>
-          Wallet:
+          Wallet ({balance} ETH):
           <CopyToClipboard
             className="pointer ml-2"
             text={history.location.state.address}
@@ -77,7 +92,7 @@ export default class Stats extends Component {
         <div className="row">
           <div className="col-xl-3 col-sm-6">
             <StatsBox
-              title="Transaction Count"
+              title="Transactions"
               mdiIcon="mdi-counter"
               value={isLoading ? loadingString : transactions.length}
             />
@@ -96,7 +111,7 @@ export default class Stats extends Component {
           <div className="col-xl-3 col-sm-6">
             <StatsBox
               mdiIcon="mdi-timer-sand"
-              title="Pending Count"
+              title="Pending"
               value={
                 isLoading
                   ? loadingString
@@ -107,7 +122,7 @@ export default class Stats extends Component {
           <div className="col-xl-3 col-sm-6">
             <StatsBox
               mdiIcon="mdi-check"
-              title="Executed Count"
+              title="Confirmed"
               value={
                 isLoading ? loadingString : this.countTransactionsByStatus(true)
               }
