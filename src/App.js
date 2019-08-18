@@ -11,7 +11,7 @@ import './App.css';
 import './assets/css/style.css';
 import './assets/css/icons.css';
 import './assets/custom.css';
-
+console.log('   sdsads Test');
 function App() {
 	return (
 		<Router history={history}>
