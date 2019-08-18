@@ -10,7 +10,7 @@ async function walletValidator(state) {
 		: false;
 	const exists = isMultisig
 		? StorageService.getByAddress(address) &&
-      StorageService.getByAddress(address).length !== 0
+		  StorageService.getByAddress(address).length !== 0
 		: false;
 	let errors = {};
 	name === undefined || name === '' || name.length === 0

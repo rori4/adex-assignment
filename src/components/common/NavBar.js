@@ -50,7 +50,7 @@ export default class NavBar extends React.Component {
 									className='h6'
 								>
 									<FontAwesomeIcon icon={faGithub} className='mr-2' />
-                  GitHub
+									GitHub
 								</NavLink>
 							</NavItem>
 						</Nav>

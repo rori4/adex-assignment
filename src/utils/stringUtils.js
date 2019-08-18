@@ -6,21 +6,21 @@ export function shorten(address) {
 
 export function badgeColorSwitcher(i) {
 	switch (i % 7) {
-	case 0:
-		return 'info';
-	case 1:
-		return 'primary';
-	case 2:
-		return 'dark';
-	case 3:
-		return 'warning';
-	case 4:
-		return 'danger';
-	case 5:
-		return 'info';
-	case 6:
-		return 'light';
-	default:
-		return 'dark';
+		case 0:
+			return 'info';
+		case 1:
+			return 'primary';
+		case 2:
+			return 'dark';
+		case 3:
+			return 'warning';
+		case 4:
+			return 'danger';
+		case 5:
+			return 'info';
+		case 6:
+			return 'light';
+		default:
+			return 'dark';
 	}
 }

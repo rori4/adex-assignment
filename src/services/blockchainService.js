@@ -42,7 +42,10 @@ const BlockchainService = {
 			let ownersWithNames = [];
 			if (Array.isArray(owners)) {
 				owners.forEach(address => {
-					ownersWithNames.push({ name: '', address: address });
+					ownersWithNames.push({
+						name: '',
+						address: address,
+					});
 				});
 			}
 			return {
