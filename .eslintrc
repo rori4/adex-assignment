@@ -1,24 +1,25 @@
 {
-	"env": {
-		"browser": true,
-		"es6": true
-	},
-	"extends": ["react-app", "prettier"],
-	"plugins": ["prettier"],
-	"parserOptions": {
-		"ecmaVersion": 2018
-	},
-	"rules": {
+  "env": {
+    "browser": true,
+    "es6": true
+  },
+  "extends": ["react-app", "prettier"],
+  "plugins": ["prettier"],
+  "parserOptions": {
+    "ecmaVersion": 2018
+  },
+  "rules": {
     "no-console": "warn",
-		"prettier/prettier": [
-			"error",
-			{
-				"printWidth": 80,
-				"trailingComma": "es5",
-				"jsxSingleQuote": true,
-				"singleQuote": true,
-				"useTabs": true
-			}
-		]
-	}
+    "no-tabs": "off",
+    "prettier/prettier": [
+      "error",
+      {
+        "printWidth": 80,
+        "trailingComma": "es5",
+        "jsxSingleQuote": true,
+        "singleQuote": true,
+        "useTabs": false
+      }
+    ]
+  }
 }
